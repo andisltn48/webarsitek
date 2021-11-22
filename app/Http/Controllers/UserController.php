@@ -59,7 +59,8 @@ class UserController extends Controller
         {
             $res = str_replace(array('.'), '', $str);
 
-            return $res;
+            
+            return preg_replace('~\D~', '', $res);
         }
 
         $file_bukti_pembayaran = $request->buktipembayaran;
@@ -79,8 +80,8 @@ class UserController extends Controller
             'nama_pesanan' => $desain->nama_desain,
             'id_pesanan' => $desain->id,
             'tipe_lantai' => $desain->tipe_lantai,
-            'luas_ruangan' => $request->luas_ruangan,
-            'harga_pesanan' => RemoveSpecialChar($desain->harga),
+            'luas_bangunan' => $request->luas_bangunan,
+            'harga_pesanan' => RemoveSpecialChar($request->harga_desain),
             'pembayaran_via' => $request->pembayaran,
             'bukti_pembayaran' => $fileName_bukti_pembayaran,
             'status_pengerjaan' => 'Belum Dikonfirmasi',

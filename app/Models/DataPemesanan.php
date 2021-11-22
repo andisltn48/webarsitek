@@ -17,7 +17,7 @@ class DataPemesanan extends Model
         'nama_pesanan',
         'id_pesanan',
         'tipe_lantai',
-        'luas_ruangan',
+        'luas_bangunan',
         'harga_pesanan',
         'pembayaran_via',
         'bukti_pembayaran',
@@ -33,7 +33,7 @@ class DataPemesanan extends Model
     {
         return date('d-m-Y H:i:s', strtotime($value));
     }
-    public function getHargaAttribute($value)
+    public function getHargaPesananAttribute($value)
     {
         return strrev(implode('.', str_split(strrev(strval($value)), 3)));
     }
