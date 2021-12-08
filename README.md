@@ -64,3 +64,19 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Cara-Install dengan valet
+
+1. install valet windows via composer global require cretueusebiu/valet-windows
+2. kemudian valet install
+3. clone repositori
+4. buat folder baru (ex : /Code), dan masukkan folder hasil clone ke folder Code
+5. buka cmd pada folder Code dan ketik valet park
+6. buka folder laravel (folder hasil clone) dengan VSCode dan buka terminal
+7. kemudian ketik composer install
+8. buat database di phpmyadmin
+9. kemudian setting di file .env dan atur nama database
+10. kembali ke terminal vscode dan ketik php artisan migrate
+11. kemudian ke cmd dan ketik valet start
+12. dan testing di browser dengan alamat foldernamelaravel.test 
+
