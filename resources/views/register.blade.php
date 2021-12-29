@@ -27,7 +27,7 @@
                         <div class="form-outline mb-4">
                             <label class="form-label fs-6" for="form3Example3">Nama</label>
                             <input style="border-radius: 2rem !important" type="" id="name"
-                                class="form-control form-control-lg" placeholder="Masukkan Email Anda" name="name" />
+                                class="form-control form-control-lg" placeholder="Masukkan Nama Anda" name="name" />
                         </div>
                         <!-- Email input -->
                         <div class="form-outline mb-4">
@@ -45,7 +45,7 @@
                         <div class="form-outline mb-3">
                             <label class="form-label fs-6" for="form3Example4">Password</label>
                             <input style="border-radius: 2rem !important" type="password" id="password"
-                                class="form-control form-control-lg" placeholder="Enter password" name="password" />
+                                class="form-control form-control-lg" placeholder="Masukkan password" name="password" />
                             <div class="text-danger">
                                 @error('password')
                                     {{ $message }}

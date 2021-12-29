@@ -101,4 +101,32 @@ class UserAtAdminController extends Controller
         ->addColumn('action','admin-folder.user.action')
         ->toJson();
     }
+
+    public function get_arsitek()
+    {
+        $user = User::where('role_id', '3');
+
+        $datatables = Datatables::of($user);
+
+        $datatables->orderColumn('created_at', function ($query, $order) {
+            $query->orderBy('users.created_at', $order);
+        });
+        return $datatables->addIndexColumn()->escapeColumns([])
+        ->addColumn('action','admin-folder.user.action')
+        ->toJson();
+    }
+
+    public function get_renovator()
+    {
+        $user = User::where('role_id', '4');
+
+        $datatables = Datatables::of($user);
+
+        $datatables->orderColumn('created_at', function ($query, $order) {
+            $query->orderBy('users.created_at', $order);
+        });
+        return $datatables->addIndexColumn()->escapeColumns([])
+        ->addColumn('action','admin-folder.user.action')
+        ->toJson();
+    }
 }

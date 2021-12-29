@@ -3,6 +3,11 @@
         <div class="card shadow p-3 bg-white m-2" style="border-radius: 0.7rem; max-width:50rem !important">
             @if (session('error'))
                 <div class="alert alert-danger alert-dismissible show fade">
+                    <div class="text-end">
+                        <button type="button" class="btn close" data-dismiss="alert" aria-label="Close">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
                     <div class="alert-body">
                         {{ session('error') }}
                     </div>
@@ -10,6 +15,11 @@
             @endif
             @if (session('success'))
                 <div class="alert alert-success alert-dismissible show fade">
+                    <div class="text-end">
+                        <button type="button" class="btn close" data-dismiss="alert" aria-label="Close">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
                     <div class="alert-body">
                         {{ session('success') }}
                     </div>
@@ -29,6 +39,7 @@
                     <div class="form-group">
                         <select class="form-select select2 " id="filter-lantai">
                             <option value="">Semua</option>
+                            <option value="1 Lantai">1 Lantai</option>
                             <option value="2 Lantai">2 Lantai</option>
                             <option value="3 Lantai">3 Lantai</option>
                         </select>
@@ -45,7 +56,6 @@
                             <th>Tipe Lantai</th>
                             <th>Gambar</th>
                             <th>Harga</th>
-                            <th>Tanggal Pesan</th>
                             <th>Updatet At</th>
                             <th>Action</th>
                         </tr>
@@ -53,7 +63,7 @@
                 </table>
             </div>
         </div>
-        <div class="col card shadow p-3 bg-white m-2" style="border-radius: 0.7rem;max-height: 40rem !important">
+        <div class="col card shadow p-3 bg-white m-2" style="border-radius: 0.7rem;max-height: 45rem !important">
             <div class="row">
                 <div class="col-12 col-md-8 title">
                     <h5 class="fw-bold">Tambah Desain</h5>
@@ -91,6 +101,7 @@
                         <select style="margin-top:0.7rem !important" required class="form-select select2 "
                             name="tipe_lantai">
                             <option value="">Semua</option>
+                            <option value="1 Lantai">1 Lantai</option>
                             <option value="2 Lantai">2 Lantai</option>
                             <option value="3 Lantai">3 Lantai</option>
                         </select>
@@ -110,6 +121,15 @@
                         @error('harga')
                             {{ $message }}
                         @enderror
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="mt-3">
+                        <label for="exampleFormControlInput1">Gambar Utama<sup class="text-danger">*</sup></label>
+                        <div class="custom-file">
+                            <input accept="image/*" required class="form-control-file" name="gambar_utama"
+                                type="file">
+                        </div>
                     </div>
                 </div>
                 <div class="mb-3">
@@ -207,7 +227,7 @@
         let lantai = $('#filter-lantai').val();
         let table = $('#tableDesain').DataTable({
             order: [
-                [7, "desc"]
+                [6, "desc"]
             ],
             scrollX: true,
             processing: true,
@@ -240,10 +260,6 @@
             }, {
                 className: 'dt-body-nowrap',
                 data: 'harga',
-                searchable: false
-            }, {
-                className: 'dt-body-nowrap',
-                data: 'created_at',
                 searchable: false
             }, {
                 className: 'dt-body-nowrap',

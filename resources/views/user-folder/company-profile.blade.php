@@ -3,7 +3,7 @@
         <div class="  row">
         <div class="col text-center">
             <h5 class="fw-bold">Profil</h5>
-            <hr class="mt-2" size="5" style="width:15%;margin:auto;color:#60aa7c">
+            <hr class="mt-2" size="5" style="width:15%;margin:auto;color:#303296">
         </div>
 
         <div class="deskripsi-profil mt-5 p-4">

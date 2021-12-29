@@ -1,0 +1,1 @@
+<a href="{{route('renovasi.get-gambar-renovasi', $model->id)}}" class="btn btn-primary " style="border-radius: 2rem">Lihat Gambar</a>

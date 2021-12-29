@@ -8,6 +8,7 @@ use App\Http\Controllers\InformasiController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\UserAtAdminController;
 use App\Http\Controllers\DesainController;
+use App\Http\Controllers\RenovasiController;
 use App\Http\Controllers\ProfilController;
 
 /*
@@ -33,31 +34,52 @@ Route::get('/register', function () {
     return view('register');
 });
 
+Route::group(['middleware' => ['auth']], function(){
+    Route::post('/change-password-update', [AuthController::class, 'change_password'])->name('auth.change-password-update');
+    Route::post('/change-password-updates/{id}', [AuthController::class, 'change_passwords'])->name('auth.change-password-updates');
+    Route::get('/change-password', [AuthController::class, 'change_password_create'])->name('auth.change-password');
+});
+
 Route::group(['middleware' => ['auth','cekrole:User,Admin']], function(){
     Route::resource('user', UserController::class);
 
     Route::get('/company-profile', [UserController::class, 'company_profile'])->name('user.company-profile');
 
     Route::get('/design', [UserController::class, 'design_index'])->name('user.design');
+
+    Route::get('/renovasi-user', [UserController::class, 'renovasi'])->name('user.renovasi');
+
+    Route::post('/store-to-kart', [UserController::class, 'store_item_to_kart'])->name('user.store-to-kart');
+
+    Route::post('/store-pemesanan-renovasi', [UserController::class, 'store_pemesanan_renovasi'])->name('user.store-pemesanan-renovasi');
+
     Route::get('/detail-design/{id}', [UserController::class, 'detail_design'])->name('user.detail-design');
+
+    Route::post('/destroy-cart/{id}', [UserController::class, 'destroy_cart_item'])->name('user.destroy-cart');
+
+    Route::get('/detail-item-renovasi/{id}', [UserController::class, 'detail_item_renovasi'])->name('user.detail-item-renovasi');
 
     Route::get('/media-user', [UserController::class, 'media'])->name('user.media');
 
     Route::get('/informasi-user', [UserController::class, 'informasi'])->name('user.informasi');
 
     Route::get('/get-pesanan-user', [UserController::class, 'get_pesanan'])->name('user.get-pesanan');
+
+    Route::get('/get-kart-item', [UserController::class, 'get_kart_item'])->name('user.get-kart-item');
+
+    Route::get('/get-pesanan-renovasi', [UserController::class, 'get_pesanan_renovasi'])->name('user.get-pesanan-renovasi');
+
+    Route::get('/get-progress-renovasi', [UserController::class, 'get_progress_renovasi'])->name('user.get-progress-renovasi');
+    
+    Route::get('/download-pembayaran-renovasi', [UserController::class, 'download_pembayaran_renovasi'])->name('pembayaran.download-pdf-renovasi');
+
+    Route::get('/download-pembayaran-desain', [UserController::class, 'download_pembayaran_desain'])->name('pembayaran.download-pdf-desain');
 });
 
 Route::group(['middleware' => ['auth','cekrole:Admin']], function(){
-    Route::resource('pesanan', PesananController::class);
-    Route::get('/get-pesanan', [PesananController::class, 'get_pesanan'])->name('pesanan.get-pesanan');
     Route::get('/confirm/{id}', [PesananController::class, 'confirm'])->name('pesanan.confirm');
-    Route::get('/done/{id}', [PesananController::class, 'done'])->name('pesanan.done');
-    Route::post('/store-progress/{id}', [PesananController::class, 'store_progress'])->name('pesanan.store-progress');
-
-    Route::resource('desain', DesainController::class);
-    Route::get('/get-desain', [DesainController::class, 'get_desain'])->name('desain.get-desain');
-    Route::get('/get-gambar-desain/{id}', [DesainController::class, 'get_gambar_desain'])->name('desain.get-gambar-desain');
+    Route::get('/confirm-renovasi/{id}', [PesananController::class, 'confirm_renovasi'])->name('pesanan.confirm-renovasi');
+    Route::post('/reject-renovasi/{id}', [PesananController::class, 'reject_renovasi'])->name('pesanan.reject-renovasi');
 
     Route::resource('profil', ProfilController::class);
     Route::post('/visi-store', [ProfilController::class, 'visi_store'])->name('profil.visi-store');
@@ -78,4 +100,32 @@ Route::group(['middleware' => ['auth','cekrole:Admin']], function(){
 
     Route::resource('user-admin', UserAtAdminController::class);
     Route::get('/get-user', [UserAtAdminController::class, 'get_user'])->name('user-admin.get-user');
+    Route::get('/get-arsitek', [UserAtAdminController::class, 'get_arsitek'])->name('user-admin.get-arsitek');
+    Route::get('/get-renovator', [UserAtAdminController::class, 'get_renovator'])->name('user-admin.get-renovator');
+
+    
+    Route::post('/register-arsitek-store', [AuthController::class, 'register_arsitek'])->name('auth.register-arsitek');
+    Route::post('/register-renovator-store', [AuthController::class, 'register_renovator'])->name('auth.register-renovator');
+});
+
+Route::group(['middleware' => ['auth','cekrole:Admin,Arsitek']], function(){
+    Route::resource('pesanan', PesananController::class);
+    Route::get('/get-pesanan', [PesananController::class, 'get_pesanan'])->name('pesanan.get-pesanan');
+    Route::get('/done/{id}', [PesananController::class, 'done'])->name('pesanan.done');
+    Route::post('/store-progress/{id}', [PesananController::class, 'store_progress'])->name('pesanan.store-progress');
+
+    Route::resource('desain', DesainController::class);
+    Route::get('/get-desain', [DesainController::class, 'get_desain'])->name('desain.get-desain');
+    Route::get('/get-gambar-desain/{id}', [DesainController::class, 'get_gambar_desain'])->name('desain.get-gambar-desain');
+    
+    Route::resource('renovasi', RenovasiController::class);
+    Route::get('/get-renovasi', [RenovasiController::class, 'get_renovasi'])->name('renovasi.get-renovasi');
+    Route::get('/get-gambar-renovasi/{id}', [RenovasiController::class, 'get_gambar_renovasi'])->name('renovasi.get-gambar-renovasi');
+});
+
+Route::group(['middleware' => ['auth','cekrole:Admin,Renovator']], function(){
+    Route::get('/pesanan-renovasi', [PesananController::class, 'index_renovasi'])->name('pesanan.index-renovasi');
+    Route::get('/get-pesanan-renovasi-admin', [PesananController::class, 'get_pesanan_renovasi'])->name('pesanan.get-pesanan-renovasi');
+    Route::get('/done-renovasi/{id}', [PesananController::class, 'done_renovasi'])->name('pesanan.done-renovasi');
+    Route::post('/store-progress-renovasi/{id}', [PesananController::class, 'store_progress'])->name('pesanan.store-progress-renovasi');
 });

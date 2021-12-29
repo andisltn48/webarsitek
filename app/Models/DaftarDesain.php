@@ -13,6 +13,7 @@ class DaftarDesain extends Model
         'nama_desain',
         'deskripsi',
         'tipe_lantai',
+        'gambar_utama',
         'harga'
     ];
 

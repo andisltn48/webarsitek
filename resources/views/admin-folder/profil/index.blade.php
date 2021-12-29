@@ -1,6 +1,11 @@
 <x-app-layout title="Profil">
     @if (session('error'))
         <div class="alert alert-danger alert-dismissible show fade">
+            <div class="text-end">
+                <button type="button" class="btn close" data-dismiss="alert" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
             <div class="alert-body">
                 {{ session('error') }}
             </div>
@@ -8,6 +13,11 @@
     @endif
     @if (session('success'))
         <div class="alert alert-success alert-dismissible show fade">
+            <div class="text-end">
+                <button type="button" class="btn close" data-dismiss="alert" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
             <div class="alert-body">
                 {{ session('success') }}
             </div>
@@ -38,7 +48,7 @@
                 </table>
             </div>
         </div>
-        <div class="col card shadow p-3 m-2 bg-white" style="border-radius: 0.7rem;max-height: 35rem !important">
+        <div class="col card shadow p-3 m-2 bg-white" style="border-radius: 0.7rem;">
             <div class="">
                 <div class="title">
                     <h5 class="fw-bold">Misi</h5>

@@ -3,6 +3,11 @@
     
           @if (session('error'))
         <div class="alert alert-danger alert-dismissible show fade">
+            <div class="text-end">
+                <button type="button" class="btn close" data-dismiss="alert" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div> 
             <div class="alert-body">
                 {{ session('error') }}
             </div>
@@ -10,9 +15,22 @@
         @endif
         @if (session('success'))
             <div class="alert alert-success alert-dismissible show fade">
+                <div class="text-end">
+                    <button type="button" class="btn close" data-dismiss="alert" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div> 
                 <div class="alert-body">
                     {{ session('success') }}
                 </div>
+                @if (session('pembayaran_desain') != null)
+                    <hr>
+                    <div class="d-flex mt-2">
+                        <p class="col fw-bold">Download bukti pembayaran</p>
+                        <a class="btn btn-primary col" href="{{ route('pembayaran.download-pdf-desain') }}">Download
+                            PDF</a>
+                    </div>
+                @endif
             </div>
         @endif
 
@@ -24,7 +42,7 @@
         @enderror
         <div class=" text-center">
             <h5 class="fw-bold">Pesan Desain</h5>
-            <hr class="mt-2" size="5" style="width:15%;margin:auto;color:#60aa7c">
+            <hr class="mt-2" size="5" style="width:15%;margin:auto;color:#303296">
         </div>
         <div class="mt-5">
             <div class="image text-center">
@@ -75,7 +93,7 @@
                             @csrf
                             <input type="text" name="id_desain" id="id-desain" hidden>
                             <div class="title">
-                                <p>Luas Bangunan</p>
+                                <p>Luas Bangunan (m2)</p>
                             </div>
                             <div class="form-group">
                                 <input id="luas-bangunan" name="luas_bangunan" type="number" class="form-control">
@@ -199,11 +217,17 @@
 
         $("#luas-bangunan").on("input", function() {
             let harga = currHarga.toString().split('.').join("");
+            if ($('#tipe-lantai').val() == '1 Lantai') {
+                let total = harga * 1 * $("#luas-bangunan").val()
+                console.log(total);
+                $('#harga-desain').attr('value', formatRupiah(total, 'Rp. '));
+            } 
             if ($('#tipe-lantai').val() == '2 Lantai') {
                 let total = harga * 2 * $("#luas-bangunan").val()
                 console.log(total);
                 $('#harga-desain').attr('value', formatRupiah(total, 'Rp. '));
-            } else {
+            } 
+            if ($('#tipe-lantai').val() == '3 Lantai') {
                 let total = harga * 3 * $("#luas-bangunan").val()
                 console.log(total);
                 $('#harga-desain').attr('value', formatRupiah(total, 'Rp. '));

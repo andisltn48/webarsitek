@@ -13,6 +13,9 @@ class Progress extends Model
         'id_pemesan',
         'id_pesanan',
         'progress',
+        'tipe_progress' ,
+        'judul' ,
+        'deskripsi'
     ];
 
     public function getUpdatedAtAttribute($value)

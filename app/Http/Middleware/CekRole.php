@@ -24,6 +24,6 @@ class CekRole
                 return $next($request);
             }
         }
-         return redirect('/')->with('error',"Anda tidak dapat mengakses halaman ini");
+        return redirect()->back()->with('error',"Anda tidak dapat mengakses halaman ini");
     }
 }

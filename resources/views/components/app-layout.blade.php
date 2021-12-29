@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <script src="https://kit.fontawesome.com/767ff093f8.js" crossorigin="anonymous"></script>
-    {{-- <link rel="icon" type="image/png/x-icon" href="{{ asset('img/logo-itk-text.png') }}"> --}}
+    <link rel="icon" type="image/png/x-icon" href="">
     <title>WebsiteArsitek @isset($title)
             - {{ $title }}
         @endisset</title>
@@ -25,6 +25,11 @@
     </script>
 
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.11.3/datatables.min.js"></script>
+
+   <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script> 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.bootstrap5.min.js"></script>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -91,6 +96,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
         integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        
     <script>
         lc_lightbox('.mybox', {
             wrap_class: 'lcl_fade_oc',
@@ -101,6 +107,12 @@
         });
 
         $('#home-carousel').owlCarousel({
+            items: 1,
+            margin: 10,
+            autoHeight: true
+        })
+
+        $('#home2-carousel').owlCarousel({
             items: 1,
             margin: 10,
             autoHeight: true

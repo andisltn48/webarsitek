@@ -18,6 +18,7 @@ class CreateDaftarDesainTable extends Migration
             $table->string('nama_desain');
             $table->string('deskripsi');
             $table->string('tipe_lantai');
+            $table->string('gambar_utama');
             $table->bigInteger('harga');
             $table->timestamps();
         });

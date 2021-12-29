@@ -47,10 +47,15 @@ class DesainController extends Controller
 
         $harga = RemoveSpecialChar($request->harga);
 
+        $file_gambar_utama = $request->gambar_utama;
+        $fileName_gambarUtama = time().'_'.$file_gambar_utama->getClientOriginalName();
+        $file_gambar_utama->move(public_path('storage/gambar-desain'), $fileName_gambarUtama);
+        
         $daftardesain = DaftarDesain::create([
             'nama_desain' => $request->nama_desain,
             'deskripsi' => $request->deskripsi,
             'tipe_lantai' => $request->tipe_lantai,
+            'gambar_utama' => $fileName_gambarUtama,
             'harga' => $harga
         ]);
 

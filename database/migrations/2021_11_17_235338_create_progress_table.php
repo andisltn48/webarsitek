@@ -17,7 +17,10 @@ class CreateProgressTable extends Migration
             $table->id();
             $table->bigInteger('id_pemesan');
             $table->bigInteger('id_pesanan');
+            $table->string('tipe_progress');
             $table->string('progress');
+            $table->string('judul');
+            $table->string('deskripsi')->nullable();
             $table->timestamps();
         });
     }

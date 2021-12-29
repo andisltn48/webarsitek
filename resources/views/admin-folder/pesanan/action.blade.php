@@ -1,4 +1,4 @@
-@if ($model->status_pengerjaan == 'Belum Dikonfirmasi')
+@if ($model->status_pengerjaan == 'Belum Dikonfirmasi' AND session('role') == 'Admin')
     <div class="d-flex">
         <div class="m-1">
             <a style="border-radius: 2rem" href="{{route('pesanan.confirm', $model->id)}}" class="btn btn-block btn-primary "><i

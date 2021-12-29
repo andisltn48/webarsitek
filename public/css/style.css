@@ -11,6 +11,9 @@ body {
     background: rgb(241, 241, 241);
 }
 
+.my-dropdown-toggle::after {
+    content: none;
+}
 
 .wrapper {
     display: flex;
@@ -58,7 +61,8 @@ body {
 :root {
     --header-height: 3rem;
     --nav-width: 68px;
-    --first-color: #60aa7c;
+    --first-color-admin: #60aa7c;
+    --first-color-user: #303296;
     --first-color-light: #ffffff;
     --white-color: #F7F6FB;
     --normal-font-size: 1rem;
@@ -91,7 +95,13 @@ a {
 }
 
 .header_toggle {
-    color: var(--first-color);
+    color: var(--first-color-admin);
+    font-size: 1.5rem;
+    cursor: pointer
+}
+
+.header_toggle_user {
+    color: var(--first-color-user);
     font-size: 1.5rem;
     cursor: pointer
 }
@@ -110,7 +120,19 @@ a {
     left: -30%;
     width: var(--nav-width);
     height: 100vh;
-    background-color: var(--first-color);
+    background-color: var(--first-color-admin);
+    padding: .5rem 1rem 0 0;
+    transition: .5s;
+    z-index: var(--z-fixed)
+}
+
+.u-navbar {
+    position: fixed;
+    top: 0;
+    left: -30%;
+    width: var(--nav-width);
+    height: 100vh;
+    background-color: var(--first-color-user);
     padding: .5rem 1rem 0 0;
     transition: .5s;
     z-index: var(--z-fixed)
@@ -178,7 +200,7 @@ a {
     height: 100vh
 }
 
-.tab {
+.tab, .tab_user {
     overflow: hidden;
 }
 /* Style the buttons inside the tab */
@@ -191,15 +213,33 @@ a {
     border: 2px solid #60aa7c;
 }
 
+.tab_user button{
+    border-radius: 2rem;
+    padding: 0.5rem;
+    background-color: white;
+    color: black;
+    border: 2px solid #303296;
+}
+
 /* Change background color of buttons on hover */
 .tab button:hover {
     background-color: #60aa7c;
     color: white;
 }
 
+.tab_user button:hover {
+    background-color: #303296;
+    color: white;
+}
+
 /* Create an active/current tablink class */
 .tab button.active {
     background-color: #60aa7c;
+    color: white;
+}
+
+.tab_user button.active {
+    background-color: #303296;
     color: white;
 }
 
@@ -259,7 +299,8 @@ flex-wrap: wrap !important;
     :root {
         --header-height: 3rem;
         --nav-width: 270px;
-        --first-color: #60aa7c;
+        --first-color-admin: #60aa7c;
+        --first-color-user: #303296;
         --first-color-light: #ffffff;
         --white-color: #F7F6FB;
         --normal-font-size: 1rem;
@@ -286,6 +327,11 @@ flex-wrap: wrap !important;
     }
 
     .l-navbar {
+        left: 0;
+        padding: 1rem 1rem 0 0
+    }
+
+    .u-navbar {
         left: 0;
         padding: 1rem 1rem 0 0
     }

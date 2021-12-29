@@ -22,6 +22,8 @@ class AuthController extends Controller
             // dd($role->name);
             if ($role->name == 'User') {
                 return redirect(route('user.index'));
+            } elseif ($role->name == 'Renovator') {
+                return redirect(route('pesanan.index-renovasi'));
             } else {
                 return redirect(route('pesanan.index'));
             }
@@ -57,5 +59,94 @@ class AuthController extends Controller
         ]);
 
         return redirect('/')->with('success', 'Berhasil membuat akun');    
+    }
+    public function register_arsitek(Request $request){
+        $request->validate(
+            [
+                'password' => ['min:6','regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'],
+                'email' => ['unique:users,email']
+            ],
+            [
+                'password.regex' => 'Must contain at least one uppercase/lowercase letters and one number'
+            ]
+        );
+
+        // dd($request->password);
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'remember_token' => \Str::random(50),
+            'role_id' => '3',
+        ]);
+
+        return redirect()->back()->with('success', 'Berhasil membuat akun'); 
+    }
+
+    public function register_renovator(Request $request){
+        $request->validate(
+            [
+                'password' => ['min:6','regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'],
+                'email' => ['unique:users,email']
+            ],
+            [
+                'password.regex' => 'Must contain at least one uppercase/lowercase letters and one number'
+            ]
+        );
+
+        // dd($request->password);
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'remember_token' => \Str::random(50),
+            'role_id' => '4',
+        ]);
+
+        return redirect()->back()->with('success', 'Berhasil membuat akun'); 
+    }
+
+    public function change_password_create(Request $request)
+    {
+        return view('change-password');
+    }
+
+    public function change_password(Request $request)
+    {
+        $request->validate(
+            [
+                'password' => ['min:6','regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'],
+                'email' => ['unique:users,email']
+            ],
+            [
+                'password.regex' => 'Must contain at least one uppercase/lowercase letters and one number'
+            ]
+        );
+
+        $user = User::find(Auth::user()->id);
+        $user->update([
+            'password' => Hash::make($request->password)
+        ]);
+
+        return redirect()->back()->with('success', 'Password berhasil diubah');
+    }
+
+    public function change_passwords(Request $request, $id)
+    {
+        $request->validate(
+            [
+                'password_baru' => ['min:6','regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'],
+            ],
+            [
+                'password_baru.regex' => 'Must contain at least one uppercase/lowercase letters and one number'
+            ]
+        );
+
+        $user = User::find($id);
+        $user->update([
+            'password' => Hash::make($request->password_baru)
+        ]);
+
+        return redirect()->back()->with('success', 'Password berhasil diubah');
     }
 }

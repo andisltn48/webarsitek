@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DataPemesanan;
+use App\Models\DataPemesananRenovasi;
 use App\Models\Progress;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -95,6 +96,16 @@ class PesananController extends Controller
         return redirect()->back()->with('success', 'Data pesanan berhasil dihapus');
     }
 
+    public function reject_renovasi($id)
+    {
+        $pesanan = DataPemesananRenovasi::where('id', $id)->first();
+        if ($pesanan) {
+            $pesanan->delete();
+        }
+
+        return redirect()->back()->with('success', 'Data pesanan berhasil dihapus');
+    }
+
     public function get_pesanan(Request $request)
     {
         function convert($harga)
@@ -106,6 +117,10 @@ class PesananController extends Controller
 
         if ($request->input('status') != null) {
             $datapemesanan = $datapemesanan->where('status_pengerjaan', $request->status);
+        }
+
+        if (session('role') == 'Arsitek') {
+            $datapemesanan = $datapemesanan->where('status_pengerjaan', "Dalam Pengerjaan");
         }
         
         $datatables = Datatables::of($datapemesanan);
@@ -130,7 +145,10 @@ class PesananController extends Controller
             $store = Progress::create([
                 'id_pemesan' => $id,
                 'id_pesanan' => $request->id_pesanan,
-                'progress' => $fileName_progress
+                'progress' => $fileName_progress,
+                'tipe_progress' => $request->tipe_progress,
+                'judul' => $request->judul,
+                'deskripsi' => $request->deskripsi
             ]);
         }
 
@@ -140,6 +158,16 @@ class PesananController extends Controller
     public function confirm($id)
     {
         $datapemesanan = DataPemesanan::where('id', $id)->first();
+        $datapemesanan->update([
+            'status_pengerjaan' => 'Dalam Pengerjaan'
+        ]);
+
+        return redirect()->back()->with('success', 'Pesanan berhasil dikonfirmasi');
+    }
+
+    public function confirm_renovasi($id)
+    {
+        $datapemesanan = DataPemesananRenovasi::where('id', $id)->first();
         $datapemesanan->update([
             'status_pengerjaan' => 'Dalam Pengerjaan'
         ]);
@@ -163,5 +191,53 @@ class PesananController extends Controller
         }
 
         return redirect()->back()->with('success', 'Pesanan selesai dikerjakan');
+    }
+
+    public function done_renovasi($id)
+    {
+        $datapemesanan = DataPemesananRenovasi::where('id', $id)->first();
+        $datapemesanan->update([
+            'status_pengerjaan' => 'Selesai Dikerjakan'
+        ]);
+
+        $progress = Progress::where('id_pesanan', $id)->where('tipe_progress', 'Progress Renovasi')->get();
+        foreach ($progress as $key => $value) {
+            if(\File::exists(public_path('storage/progress/'.$value->progress))){
+                \File::delete(public_path('storage/progress/'.$value->progress));
+            }
+            $value->delete();
+        }
+
+        return redirect()->back()->with('success', 'Pesanan selesai dikerjakan');
+    }
+
+    public function index_renovasi()
+    {
+        return view('admin-folder.pesanan-renovasi.index');
+    }
+
+    public function get_pesanan_renovasi(Request $request)
+    {
+
+        $datapemesanan = DataPemesananRenovasi::select('data_pemesanan_renovasi.*');
+
+        if ($request->input('status') != null) {
+            $datapemesanan = $datapemesanan->where('status_pengerjaan', $request->status);
+        }
+
+        if (session('role') == 'Renovator') {
+            $datapemesanan = $datapemesanan->where('status_pengerjaan', "Dalam Pengerjaan");
+        }
+        
+        $datatables = Datatables::of($datapemesanan);
+
+        $datatables->orderColumn('updated_at', function ($query, $order) {
+            $query->orderBy('data_pemesanan_renovasi.updated_at', $order);
+        });
+        return $datatables->addIndexColumn()->escapeColumns([])
+        ->addColumn('action','admin-folder.pesanan-renovasi.action')
+        ->addColumn('deskripsi','admin-folder.pesanan-renovasi.deskripsi-item-renovasi')
+        ->addColumn('bukti_pembayaran','admin-folder.pesanan-renovasi.lihat-bukti')
+        ->toJson();
     }
 }

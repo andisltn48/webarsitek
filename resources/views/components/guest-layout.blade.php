@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <script src="https://kit.fontawesome.com/767ff093f8.js" crossorigin="anonymous"></script>
-    {{-- <link rel="icon" type="image/png/x-icon" href="{{ asset('img/logo-itk-text.png') }}"> --}}
+    <link rel="icon" type="image/png/x-icon" href="">
     <title>WebsiteArsitek @isset($title)
             - {{ $title }}
         @endisset</title>

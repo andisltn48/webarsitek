@@ -1,49 +1,56 @@
 <x-app-layout title="Home">
-    <div class="d-flex info-data">
-        <div class="col m-1">
-            <div class="card shadow p-3 bg-white jumlah-aset" style="border-radius: 0.7rem">
-                <div class="card-body row">
-                    <div class="col">
-                        <h5 class="card-title fw-bolder" id="jumlahpesanan">{{$jumlah_pesanan}}</h5>
-                        <h6 class="card-subtitle mt-2 text-nowrap">Jumlah Pesanan</h6>
+    @if (session('role') == 'Admin')
+        <div class="d-flex info-data">
+            <div class="col m-1">
+                <div class="card shadow p-3 bg-white jumlah-aset" style="border-radius: 0.7rem">
+                    <div class="card-body row">
+                        <div class="col">
+                            <h5 class="card-title fw-bolder" id="jumlahpesanan">{{ $jumlah_pesanan }}</h5>
+                            <h6 class="card-subtitle mt-2 text-nowrap">Jumlah Pesanan</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col m-1">
+                <div class="card shadow p-3 bg-white aset-nonaktif" style="border-radius: 0.7rem">
+                    <div class="card-body row">
+                        <div class="col">
+                            <h5 class="card-title fw-bolder" id="pengguna">{{ $jumlah_pengguna }}</h5>
+                            <h6 class="card-subtitle mt-2 text-nowrap">Jumlah Pengguna</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col m-1">
+                <div class="card shadow p-3 bg-white aset-nonaktif" style="border-radius: 0.7rem">
+                    <div class="card-body row">
+                        <div class="col">
+                            <h5 class="card-title fw-bolder" id="dalampembuatan">{{ $onprogress }}</h5>
+                            <h6 class="card-subtitle mt-2 text-nowrap">On-Progress</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col m-1">
+                <div class="card shadow p-3 bg-white aset-nonaktif" style="border-radius: 0.7rem">
+                    <div class="card-body row">
+                        <div class="col">
+                            <h5 class="card-title fw-bolder" id="selesai">{{ $selesai }}</h5>
+                            <h6 class="card-subtitle mt-2 text-nowrap">Selesai</h6>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col m-1">
-            <div class="card shadow p-3 bg-white aset-nonaktif" style="border-radius: 0.7rem">
-                <div class="card-body row">
-                    <div class="col">
-                        <h5 class="card-title fw-bolder" id="pengguna">{{$jumlah_pengguna}}</h5>
-                        <h6 class="card-subtitle mt-2 text-nowrap">Jumlah Pengguna</h6>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col m-1">
-            <div class="card shadow p-3 bg-white aset-nonaktif" style="border-radius: 0.7rem">
-                <div class="card-body row">
-                    <div class="col">
-                        <h5 class="card-title fw-bolder" id="dalampembuatan">{{$onprogress}}</h5>
-                        <h6 class="card-subtitle mt-2 text-nowrap">On-Progress</h6>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col m-1">
-            <div class="card shadow p-3 bg-white aset-nonaktif" style="border-radius: 0.7rem">
-                <div class="card-body row">
-                    <div class="col">
-                        <h5 class="card-title fw-bolder" id="selesai">{{$selesai}}</h5>
-                        <h6 class="card-subtitle mt-2 text-nowrap">Selesai</h6>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    @endif
     <div class="card shadow p-3 bg-white mt-3" style="border-radius: 0.7rem">
         @if (session('error'))
             <div class="alert alert-danger alert-dismissible show fade">
+                <div class="text-end">
+                    <button type="button" class="btn close" data-dismiss="alert" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
                 <div class="alert-body">
                     {{ session('error') }}
                 </div>
@@ -51,6 +58,11 @@
         @endif
         @if (session('success'))
             <div class="alert alert-success alert-dismissible show fade">
+                <div class="text-end">
+                    <button type="button" class="btn close" data-dismiss="alert" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
                 <div class="alert-body">
                     {{ session('success') }}
                 </div>
@@ -62,21 +74,23 @@
             </div>
         </div>
         <hr>
-        <div class="row mt-2">
-            <div class="col" style="max-width: 15rem !important">
-                <div class="title-filter">
-                    <p>Status Pengerjaan</p>
-                </div>
-                <div class="form-group">
-                    <select class="form-select select2 " id="filter-status">
-                        <option value="">Semua</option>
-                        <option value="Belum Dikonfirmasi">Belum Dikonfirmasi</option>
-                        <option value="Dalam Pengerjaan">Dalam Pengerjaan</option>
-                        <option value="Selesai Dikerjakan">Selesai Dikerjakan</option>
-                    </select>
+        @if (session('role') == 'Admin')
+            <div class="row mt-2">
+                <div class="col" style="max-width: 15rem !important">
+                    <div class="title-filter">
+                        <p>Status Pengerjaan</p>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-select select2 " id="filter-status">
+                            <option value="">Semua</option>
+                            <option value="Belum Dikonfirmasi">Belum Dikonfirmasi</option>
+                            <option value="Dalam Pengerjaan">Dalam Pengerjaan</option>
+                            <option value="Selesai Dikerjakan">Selesai Dikerjakan</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
         <div class="row mt-4 me-1 ms-1">
             <table id="tablePesanan" class="table table-bordered display nowrap">
                 <thead>
@@ -124,12 +138,35 @@
                             </div>
                         </div>
                         <div class="mb-3">
+                            <div class="form-group">
+                                <label class="text-dark fw">Tipe Progress<sup class="text-danger">*</sup></label>
+                                <select style="margin-top:0.7rem !important" required class="form-select select2 "
+                                    name="tipe_progress">
+                                    <option value="">Semua</option>
+                                    <option value="Progress Desain">Progress Desain</option>
+                                    <option value="Progress Pengerjaan">Progress Pengerjaan</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
                             <div class="mt-3">
                                 <label for="exampleFormControlInput1">Gambar<sup class="text-danger">*</sup></label>
                                 <div class="custom-file">
                                     <input multiple accept="image/*" required class="form-control-file"
                                         name="gambar_progress[]" type="file">
                                 </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label class="text-dark fw">Judul<sup class="text-danger">*</sup></label>
+                                <input class="form-control shadow-sm" name="judul" style="margin-top:0.3rem" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label class="text-dark fw">Deskripsi</label>
+                                <input class="form-control shadow-sm" name="deskripsi" style="margin-top:0.3rem">
                             </div>
                         </div>
                         <div class="col text-center mt-4">
@@ -162,6 +199,25 @@
     <script>
         let status = $('#filter-status').val();
         let table = $('#tablePesanan').DataTable({
+            dom: 'Bfrtip',
+            buttons: {
+                buttons: [{
+                    extend: 'excel',
+                    text: "Export to excel",
+                    exportOptions: {
+                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11 ]
+                    }
+                }],
+                dom: {
+                    button: {
+                        tag: "button",
+                        className: "btn btn-success"
+                    },
+                    buttonLiner: {
+                        tag: null
+                    }
+                }
+            },
             order: [
                 [11, "desc"]
             ],
