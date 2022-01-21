@@ -57,8 +57,8 @@
                 <a href="{{ route('user.design') }}" class="nav_link"> <i class="fas fa-dot-circle"></i>
                     <span class="nav_name">Design</span> </a>
 
-                <a href="{{ route('user.renovasi') }}" class="nav_link"> <i class="fas fa-dot-circle"></i>
-                    <span class="nav_name">Renovasi</span> </a>
+                {{-- <a href="{{ route('user.renovasi') }}" class="nav_link"> <i class="fas fa-dot-circle"></i>
+                    <span class="nav_name">Renovasi</span> </a> --}}
 
                 <a href="{{ route('user.media') }}" class="nav_link"> <i class="fas fa-dot-circle"></i>
                     <span class="nav_name">Portofolio</span> </a>
@@ -76,8 +76,8 @@
                 <a href="{{ route('desain.index') }}" class="nav_link"> <i class="fas fa-dot-circle"></i>
                     <span class="nav_name">Desain</span> </a>
 
-                <a href="{{ route('renovasi.index') }}" class="nav_link"> <i class="fas fa-dot-circle"></i>
-                    <span class="nav_name">Renovasi</span> </a>
+                {{-- <a href="{{ route('renovasi.index') }}" class="nav_link"> <i class="fas fa-dot-circle"></i>
+                    <span class="nav_name">Renovasi</span> </a> --}}
 
                 {{-- <a href="{{ route('profil.index') }}" class="nav_link"> <i class="fas fa-dot-circle"></i>
                     <span class="nav_name">Profil</span> --}}
