@@ -70,8 +70,8 @@
                 <a href="{{ route('pesanan.index') }}" class="nav_link"> <i class="fas fa-dot-circle"></i>
                     <span class="nav_name">Pesanan</span> </a>
 
-                <a href="{{ route('pesanan.index-renovasi') }}" class="nav_link"> <i class="fas fa-dot-circle"></i>
-                    <span class="nav_name">Pesanan Renovasi</span> </a>
+                {{-- <a href="{{ route('pesanan.index-renovasi') }}" class="nav_link"> <i class="fas fa-dot-circle"></i>
+                    <span class="nav_name">Pesanan Renovasi</span> </a> --}}
 
                 <a href="{{ route('desain.index') }}" class="nav_link"> <i class="fas fa-dot-circle"></i>
                     <span class="nav_name">Desain</span> </a>

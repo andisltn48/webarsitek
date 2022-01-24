@@ -52,16 +52,18 @@
             <th>Tipe Lantai</th>
             <th>Luas</th>
             <th>Harga</th>
+            <th>Total Harga Bayar</th>
         </tr>
         <tr>
             <td>{{$data->nama_pesanan}}</td>
             <td>{{$data->tipe_lantai}}</td>
             <td>{{$data->luas_bangunan}}</td>
             <td>Rp. {{$data->harga_pesanan}}</td>
+            <td>Rp. {{$data->total_harga_bayar}}</td>
         </tr>
         <tr>
-            <th colspan="3">Total</th>
-            <td>Rp. {{$data->harga_pesanan}}</td>
+            <th colspan="4">Total</th>
+            <td>Rp. {{$data->total_harga_bayar}}</td>
         </tr>
     </table>
      

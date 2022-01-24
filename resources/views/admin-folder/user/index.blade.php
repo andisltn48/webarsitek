@@ -37,8 +37,8 @@
                     style="width: 7rem !important">User</button>
                 <button class="m-2 tablinks" onclick="tabUser(event, 'Arsitek')"
                     style="width: 7rem !important">Arsitek</button>
-                <button class="m-2 tablinks" onclick="tabUser(event, 'Renovator')"
-                    style="width: 7rem !important">Renovator</button>
+                {{-- <button class="m-2 tablinks" onclick="tabUser(event, 'Renovator')"
+                    style="width: 7rem !important">Renovator</button> --}}
             </div>
             <div id="User" class=" mt-4 tabcontent active">
                 <table id="tableUser" class="table table-bordered" style="width: 100%; overflow-x: scroll;">

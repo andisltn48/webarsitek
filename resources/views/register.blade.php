@@ -26,13 +26,13 @@
 
                         <div class="form-outline mb-4">
                             <label class="form-label fs-6" for="form3Example3">Nama</label>
-                            <input style="border-radius: 2rem !important" type="" id="name"
+                            <input required style="border-radius: 2rem !important" type="" id="name"
                                 class="form-control form-control-lg" placeholder="Masukkan Nama Anda" name="name" />
                         </div>
                         <!-- Email input -->
                         <div class="form-outline mb-4">
                             <label class="form-label fs-6" for="form3Example3">Email</label>
-                            <input style="border-radius: 2rem !important" type="email" id="email"
+                            <input required style="border-radius: 2rem !important" type="email" id="email"
                                 class="form-control form-control-lg" placeholder="Masukkan Email Anda" name="email" />
                             <div class="text-danger">
                                 @error('email')

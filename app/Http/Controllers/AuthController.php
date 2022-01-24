@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function login(Request $request){
+    public function login(Request $request){ //ini func login
         // echo $request->email , $request->password;
         $validate = $request->only('email', 'password');
 
@@ -21,7 +21,7 @@ class AuthController extends Controller
             session(['role' => $role->name]);
             // dd($role->name);
             if ($role->name == 'User') {
-                return redirect(route('user.index'));
+                return redirect(route('user.media')); // edit kalau mau merubah halaman awal yang ingin dituju
             } elseif ($role->name == 'Renovator') {
                 return redirect(route('pesanan.index-renovasi'));
             } else {

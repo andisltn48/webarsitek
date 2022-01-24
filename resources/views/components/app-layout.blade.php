@@ -59,11 +59,13 @@
 
             <!-- Main Content -->
             <div id="content">
-                <div class="container-fluid">
+                <div class="container-fluid " style="margin-bottom: 5rem">
                     {{ $slot }}
                 </div>
+                @include('layouts/footer')
             </div>
         </div>
+        
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", function(event) {
@@ -81,8 +83,6 @@
                         nav.classList.toggle('expand')
                         headerpd.classList.toggle('body-pd')
                         contentspan.classList.toggle('span')
-
-                        
                     })
                 }
             }
@@ -113,6 +113,18 @@
         })
 
         $('#home2-carousel').owlCarousel({
+            items: 1,
+            margin: 10,
+            autoHeight: true
+        })
+
+        $('#home3-carousel').owlCarousel({
+            items: 1,
+            margin: 10,
+            autoHeight: true
+        })
+
+        $('#home4-carousel').owlCarousel({
             items: 1,
             margin: 10,
             autoHeight: true

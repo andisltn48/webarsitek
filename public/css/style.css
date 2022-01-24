@@ -249,8 +249,17 @@ display: none;
 padding: 6px 12px;
 }
 
+.tahap {
+    display: none !important;
+    padding: 6px 12px;
+}
+
 .tabcontent.active {
     display: block;
+}
+
+.tahap.active {
+    display: block !important;
 }
 
 .item-design {

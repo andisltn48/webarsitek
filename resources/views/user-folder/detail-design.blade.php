@@ -111,10 +111,17 @@
                                 <input id="tipe-lantai" name="tipe_lantai" type="text" class="form-control" readonly>
                             </div>
                             <div class="mt-3">
-                                <p>Harga Desain</p>
+                                <p>Total Harga</p>
                             </div>
                             <div class="form-group">
                                 <input id="harga-desain" name="harga_desain" type="text" class="form-control"
+                                    readonly>
+                            </div>
+                            <div class="mt-3">
+                                <p>Harga yang harus di bayar (30% Harga Total)</p>
+                            </div>
+                            <div class="form-group">
+                                <input id="harga-bayar" name="harga_bayar" type="text" class="form-control"
                                     readonly>
                             </div>
                             <div class="mt-3">
@@ -155,10 +162,10 @@
                                     class="form-control">
                             </div>
                             <div class="note mt-3">
-                                <p class="text-disable">*Untuk jasa pengerjaan dan berikut bahan
+                                {{-- <p class="text-disable">*Untuk jasa pengerjaan dan berikut bahan
                                     bangunan silahkan konsultasi melalui <a href=""
                                         class="text-success"><u>Whatsapp</u></a> untuk menyesuaikan
-                                    jenis bahan yg dibutuhkan bedasarkan keinginan anda</p>
+                                    jenis bahan yg dibutuhkan bedasarkan keinginan anda</p> --}}
                             </div>
                             <div class="mt-4 text-end">
                                 <button style="border-radius: 2rem" class="btn me-1 btn-block btn-success"
@@ -220,35 +227,41 @@
             if ($('#tipe-lantai').val() == '1 Lantai') {
                 let total = harga * 1 * $("#luas-bangunan").val()
                 console.log(total);
-                $('#harga-desain').attr('value', formatRupiah(total, 'Rp. '));
+                let hargaBayar = total * 30 / 100;
+                hargaBayar = Math.ceil(hargaBayar)
+                console.log(hargaBayar);
+                $('#harga-desain').attr('value',formatRupiah(total));
+                $('#harga-bayar').attr('value', formatRupiah(hargaBayar));
             } 
             if ($('#tipe-lantai').val() == '2 Lantai') {
                 let total = harga * 2 * $("#luas-bangunan").val()
                 console.log(total);
-                $('#harga-desain').attr('value', formatRupiah(total, 'Rp. '));
+                let hargaBayar = total * 30 / 100;
+                hargaBayar = Math.ceil(hargaBayar)
+                $('#harga-desain').attr('value', 'Rp. '.formatRupiah(total));
+                $('#harga-bayar').attr('value', 'Rp. '.formatRupiah(hargaBayar));
             } 
             if ($('#tipe-lantai').val() == '3 Lantai') {
                 let total = harga * 3 * $("#luas-bangunan").val()
                 console.log(total);
-                $('#harga-desain').attr('value', formatRupiah(total, 'Rp. '));
+                let hargaBayar = total * 30 / 100;
+                hargaBayar = Math.ceil(hargaBayar)
+                $('#harga-desain').attr('value', 'Rp. '.formatRupiah(total));
+                $('#harga-bayar').attr('value', 'Rp. '.formatRupiah(hargaBayar));
             }
         });
 
-        function formatRupiah(angka, prefix){
-			var number_string = angka.toString(),
-			split   		= number_string.split(','),
-			sisa     		= split[0].length % 3,
-			rupiah     		= split[0].substr(0, sisa),
-			ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
- 
-			// tambahkan titik jika yang di input sudah menjadi angka ribuan
-			if(ribuan){
-				separator = sisa ? '.' : '';
-				rupiah += separator + ribuan.join('.');
-			}
- 
-			rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-			return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        function formatRupiah(angka){
+			var	number_string = angka.toString(),
+                sisa 	= number_string.length % 3,
+                rupiah 	= number_string.substr(0, sisa),
+                ribuan 	= number_string.substr(sisa).match(/\d{3}/g);
+                    
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+            return rupiah;
 		}
     </script>
 

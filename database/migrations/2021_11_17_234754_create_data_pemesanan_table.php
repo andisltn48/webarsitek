@@ -22,8 +22,11 @@ class CreateDataPemesananTable extends Migration
             $table->string('nama_pesanan');
             $table->bigInteger('id_pesanan');
             $table->string('tipe_lantai');
-            $table->bigInteger('luas_bangunan');
-            $table->bigInteger('harga_pesanan');
+            $table->string('luas_bangunan');
+            $table->string('harga_pesanan');
+            $table->string('harga_bayar');
+            $table->string('total_harga_bayar');
+            $table->string('tahap');
             $table->string('pembayaran_via');
             $table->string('bukti_pembayaran');
             $table->string('status_pengerjaan');

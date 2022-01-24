@@ -20,6 +20,7 @@ class CreateProgressTable extends Migration
             $table->string('tipe_progress');
             $table->string('progress');
             $table->string('judul');
+            $table->string('tahap');
             $table->string('deskripsi')->nullable();
             $table->timestamps();
         });

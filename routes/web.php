@@ -41,13 +41,15 @@ Route::group(['middleware' => ['auth']], function(){
 });
 
 Route::group(['middleware' => ['auth','cekrole:User,Admin']], function(){
-    Route::resource('user', UserController::class);
+    Route::resource('user', UserController::class); //ada user index
 
     Route::get('/company-profile', [UserController::class, 'company_profile'])->name('user.company-profile');
 
     Route::get('/design', [UserController::class, 'design_index'])->name('user.design');
 
     Route::get('/renovasi-user', [UserController::class, 'renovasi'])->name('user.renovasi');
+
+    Route::get('/done-confirm', [UserController::class, 'done_confirm'])->name('user.done-confirm');
 
     Route::post('/store-to-kart', [UserController::class, 'store_item_to_kart'])->name('user.store-to-kart');
 
@@ -62,6 +64,10 @@ Route::group(['middleware' => ['auth','cekrole:User,Admin']], function(){
     Route::get('/media-user', [UserController::class, 'media'])->name('user.media');
 
     Route::get('/informasi-user', [UserController::class, 'informasi'])->name('user.informasi');
+    
+    Route::post('/upload-revisi', [UserController::class, 'upload_revisi'])->name('user.upload-revisi');
+    
+    Route::get('/hapus-revisi/{revisi_id}', [UserController::class, 'hapus_revisi'])->name('user.delete-revisi');
 
     Route::get('/get-pesanan-user', [UserController::class, 'get_pesanan'])->name('user.get-pesanan');
 
@@ -77,6 +83,8 @@ Route::group(['middleware' => ['auth','cekrole:User,Admin']], function(){
 });
 
 Route::group(['middleware' => ['auth','cekrole:Admin']], function(){
+    
+
     Route::get('/confirm/{id}', [PesananController::class, 'confirm'])->name('pesanan.confirm');
     Route::get('/confirm-renovasi/{id}', [PesananController::class, 'confirm_renovasi'])->name('pesanan.confirm-renovasi');
     Route::post('/reject-renovasi/{id}', [PesananController::class, 'reject_renovasi'])->name('pesanan.reject-renovasi');
@@ -109,9 +117,15 @@ Route::group(['middleware' => ['auth','cekrole:Admin']], function(){
 });
 
 Route::group(['middleware' => ['auth','cekrole:Admin,Arsitek']], function(){
+    
+    Route::get('/done-revisi/{revisi_id}', [UserController::class, 'done_revisi'])->name('user.done-revisi');
+
     Route::resource('pesanan', PesananController::class);
     Route::get('/get-pesanan', [PesananController::class, 'get_pesanan'])->name('pesanan.get-pesanan');
+    Route::get('/confirm/{id}', [PesananController::class, 'confirm'])->name('pesanan.confirm');
     Route::get('/done/{id}', [PesananController::class, 'done'])->name('pesanan.done');
+    Route::get('/to-tahap-dua/{id}', [PesananController::class, 'to_tahap_dua'])->name('pesanan.to-tahap-dua');
+    Route::get('/to-tahap-tiga/{id}', [PesananController::class, 'to_tahap_tiga'])->name('pesanan.to-tahap-tiga');
     Route::post('/store-progress/{id}', [PesananController::class, 'store_progress'])->name('pesanan.store-progress');
 
     Route::resource('desain', DesainController::class);

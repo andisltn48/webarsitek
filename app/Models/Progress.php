@@ -15,6 +15,7 @@ class Progress extends Model
         'progress',
         'tipe_progress' ,
         'judul' ,
+        'tahap' ,
         'deskripsi'
     ];
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DataPemesanan;
 use App\Models\DataPemesananRenovasi;
 use App\Models\Progress;
+use App\Models\Revisi;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
@@ -22,7 +23,9 @@ class PesananController extends Controller
         $jumlah_pengguna = User::where('role_id', '2')->get()->count();
         $onprogress = DataPemesanan::where('status_pengerjaan', 'Dalam Pengerjaan')->get()->count();
         $selesai = DataPemesanan::where('status_pengerjaan', 'Selesai Dikerjakan')->get()->count(); 
-        return view('admin-folder.pesanan.index', compact('jumlah_pesanan', 'jumlah_pengguna', 'onprogress', 'selesai'));
+        $daftarrevisi = Revisi::where('revisi_tahap', 'Tahap 1')->get();
+        $daftarrevisi2 = Revisi::where('revisi_tahap', 'Tahap 2')->get();
+        return view('admin-folder.pesanan.index', compact('daftarrevisi','daftarrevisi2','jumlah_pesanan', 'jumlah_pengguna', 'onprogress', 'selesai'));
     }
 
     /**
@@ -122,7 +125,10 @@ class PesananController extends Controller
         if (session('role') == 'Arsitek') {
             $datapemesanan = $datapemesanan->where('status_pengerjaan', "Dalam Pengerjaan");
         }
-        
+
+        $daftarrevisi = Revisi::where('revisi_tahap', 'Tahap 1')->get();
+        $daftarrevisi2 = Revisi::where('revisi_tahap', 'Tahap 2')->get();
+
         $datatables = Datatables::of($datapemesanan);
 
         $datatables->orderColumn('updated_at', function ($query, $order) {
@@ -130,6 +136,7 @@ class PesananController extends Controller
         });
         return $datatables->addIndexColumn()->escapeColumns([])
         ->addColumn('action','admin-folder.pesanan.action')
+        ->addColumn('daftar_revisi','admin-folder.pesanan.daftar-revisi')
         ->addColumn('bukti_pembayaran','admin-folder.pesanan.lihat-bukti')
         ->toJson();
     }
@@ -142,12 +149,14 @@ class PesananController extends Controller
             $fileName_progress = time() . '_' . $file_progress->getClientOriginalName();
             $file_progress->move(public_path('storage/progress'), $fileName_progress);
         
+            $pemesanan =  DataPemesanan::find($request->id_pesanan);
             $store = Progress::create([
                 'id_pemesan' => $id,
                 'id_pesanan' => $request->id_pesanan,
                 'progress' => $fileName_progress,
                 'tipe_progress' => $request->tipe_progress,
                 'judul' => $request->judul,
+                'tahap' => $pemesanan->tahap,
                 'deskripsi' => $request->deskripsi
             ]);
         }
@@ -159,10 +168,31 @@ class PesananController extends Controller
     {
         $datapemesanan = DataPemesanan::where('id', $id)->first();
         $datapemesanan->update([
+            'tahap' => 'Tahap 1',
             'status_pengerjaan' => 'Dalam Pengerjaan'
         ]);
 
         return redirect()->back()->with('success', 'Pesanan berhasil dikonfirmasi');
+    }
+
+    public function to_tahap_dua($id)
+    {
+        $datapemesanan = DataPemesanan::where('id', $id)->first();
+        $datapemesanan->update([
+            'tahap' => 'Tahap 2',
+        ]);
+
+        return redirect()->back()->with('success', 'Berhasil ke tahap 2');        
+    }
+
+    public function to_tahap_tiga($id)
+    {
+        $datapemesanan = DataPemesanan::where('id', $id)->first();
+        $datapemesanan->update([
+            'tahap' => 'Tahap 3',
+        ]);
+        
+        return redirect()->back()->with('success', 'Berhasil ke tahap 3'); 
     }
 
     public function confirm_renovasi($id)
@@ -179,6 +209,7 @@ class PesananController extends Controller
     {
         $datapemesanan = DataPemesanan::where('id', $id)->first();
         $datapemesanan->update([
+            'tahap' =>  'Selesai',
             'status_pengerjaan' => 'Selesai Dikerjakan'
         ]);
 
@@ -187,6 +218,11 @@ class PesananController extends Controller
             if(\File::exists(public_path('storage/progress/'.$value->progress))){
                 \File::delete(public_path('storage/progress/'.$value->progress));
             }
+            $value->delete();
+        }
+
+        $revisi= Revisi::where('id_pesanan', $id)->get();
+        foreach ($revisi as $key => $value) {
             $value->delete();
         }
 
@@ -222,7 +258,7 @@ class PesananController extends Controller
         $datapemesanan = DataPemesananRenovasi::select('data_pemesanan_renovasi.*');
 
         if ($request->input('status') != null) {
-            $datapemesanan = $datapemesanan->where('status_pengerjaan', $request->status);
+            $datapemesanan = $datapemesanan->where('tahap', $request->status);
         }
 
         if (session('role') == 'Renovator') {

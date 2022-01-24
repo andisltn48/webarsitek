@@ -9,6 +9,7 @@ use App\Models\DaftarGambarDesain;
 use App\Models\DaftarGambarRenovasi;
 use App\Models\Progress;
 use App\Models\Misi;
+use App\Models\Revisi;
 use App\Models\Media;
 use App\Models\Informasi;
 use App\Models\Visi;
@@ -36,12 +37,36 @@ class UserController extends Controller
         return $nopemesanan;
     }
 
-    public function index()
-    {
-        $progress_desain = Progress::where('id_pemesan', Auth::user()->id)->where('tipe_progress', 'Progress Desain')->get();
+    public function index(Request $request)
+    { 
+        $pembayaran = [
+            'BNI' => 'BNI - 1111000000',
+            'BRI' => 'BRI - 1111111111',
+            'Mandiri' => 'Mandiri - 111222211'
+        ]; 
+
+        $datapemesanan = DataPemesanan::where('id_pemesan', Auth::user()->id)->where('status_pengerjaan', 'Dalam Pengerjaan')->first();
+        if ($datapemesanan) {
+            $daftarrevisi = Revisi::where('id_pesanan', $datapemesanan->id)->where('revisi_tahap', 'Tahap 1')->get();
+            $daftarrevisi2 = Revisi::where('id_pesanan', $datapemesanan->id)->where('revisi_tahap', 'Tahap 2')->get();
+        } else {
+            $daftarrevisi = NULL;
+            $daftarrevisi2 = NULL;
+        }
+        
+        $progress_desain_tahap1 = Progress::where('id_pemesan', Auth::user()->id)->where('tipe_progress', 'Progress Desain')->where('tahap', 'Tahap 1')->get();
+        $progress_desain_tahap2 = Progress::where('id_pemesan', Auth::user()->id)->where('tipe_progress', 'Progress Desain')->where('tahap', 'Tahap 2')->get();
+        $progress_desain_tahap3 = Progress::where('id_pemesan', Auth::user()->id)->where('tipe_progress', 'Progress Desain')->where('tahap', 'Tahap 3')->get();
         $progress_pengerjaan = Progress::where('id_pemesan', Auth::user()->id)->where('tipe_progress', 'Progress Pengerjaan')->get();
         // dd($progress_pengerjaan);
-        return view('user-folder.index', compact('progress_desain', 'progress_pengerjaan'));
+        return view('user-folder.index', compact('progress_desain_tahap1', 
+        'progress_desain_tahap2',
+        'progress_desain_tahap3',
+        'progress_pengerjaan',
+        'daftarrevisi',
+        'daftarrevisi2',
+        'pembayaran',
+        'datapemesanan',));
     }
 
     /**
@@ -70,33 +95,43 @@ class UserController extends Controller
             return preg_replace('~\D~', '', $res);
         }
 
-        $file_bukti_pembayaran = $request->buktipembayaran;
-        $fileName_bukti_pembayaran = time() . '_' . $file_bukti_pembayaran->getClientOriginalName();
-        $file_bukti_pembayaran->move(public_path('storage/bukti-pembayaran'), $fileName_bukti_pembayaran);
+        $datapemesanan = DataPemesanan::where('id_pemesan', Auth::user()->id)->where('status_pengerjaan', 'Dalam Pengerjaan')->orWhere('status_pengerjaan', 'Belum Dikonfirmasi')->first();
+        if ($datapemesanan) {
+            
+            return redirect()->back()->with('error', 'Tidak bisa melakukan pemesanan karena anda masih memiliki pesanan yang belum selesai');
+        } else {
+            $file_bukti_pembayaran = $request->buktipembayaran;
+            $fileName_bukti_pembayaran = time() . '_' . $file_bukti_pembayaran->getClientOriginalName();
+            $file_bukti_pembayaran->move(public_path('storage/bukti-pembayaran'), $fileName_bukti_pembayaran);
 
-        $validate = $request->validate([
-            'kontak' => 'numeric'
-        ]);
-        $desain = DaftarDesain::where('id', $request->id_desain)->first();
-        // dd(RemoveSpecialChar($desain->harga));
-        $datapemesanan = DataPemesanan::create([
-            'nama_pemesan' => Auth::user()->name,
-            'id_pemesan' => Auth::user()->id,
-            'alamat_pemesan' => $request->alamat,
-            'kontak_pemesan' => $request->kontak,
-            'nama_pesanan' => $desain->nama_desain,
-            'id_pesanan' => $desain->id,
-            'tipe_lantai' => $desain->tipe_lantai,
-            'luas_bangunan' => $request->luas_bangunan,
-            'harga_pesanan' => RemoveSpecialChar($request->harga_desain),
-            'pembayaran_via' => $request->pembayaran,
-            'bukti_pembayaran' => $fileName_bukti_pembayaran,
-            'status_pengerjaan' => 'Belum Dikonfirmasi',
-            'no_pemesanan'  => $this->generateNoPemesanan(),
-        ]);
+            $validate = $request->validate([
+                'kontak' => 'numeric'
+            ]);
+            $desain = DaftarDesain::where('id', $request->id_desain)->first();
+            // dd(RemoveSpecialChar($desain->harga));
+            $datapemesanan = DataPemesanan::create([
+                'nama_pemesan' => Auth::user()->name,
+                'id_pemesan' => Auth::user()->id,
+                'alamat_pemesan' => $request->alamat,
+                'kontak_pemesan' => $request->kontak,
+                'nama_pesanan' => $desain->nama_desain,
+                'id_pesanan' => $desain->id,
+                'tipe_lantai' => $desain->tipe_lantai,
+                'luas_bangunan' => $request->luas_bangunan,
+                'harga_bayar' => RemoveSpecialChar($request->harga_bayar),
+                'tahap' => 'Belum Dikonfirmasi',
+                'total_harga_bayar' => RemoveSpecialChar($request->harga_bayar),
+                'harga_pesanan' => RemoveSpecialChar($request->harga_desain),
+                'pembayaran_via' => $request->pembayaran,
+                'bukti_pembayaran' => $fileName_bukti_pembayaran,
+                'status_pengerjaan' => 'Belum Dikonfirmasi',
+                'no_pemesanan'  => $this->generateNoPemesanan(),
+            ]); 
 
-        session(['pembayaran_desain' => $datapemesanan]);
-        return redirect()->back()->with('success', 'Berhasil melakukan pemesanan');
+            session(['pembayaran_desain' => $datapemesanan]);
+            return redirect()->back()->with('success', 'Berhasil melakukan pemesanan');
+        }
+        
     }
 
     /**
@@ -130,7 +165,35 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        function RemoveSpecialChar($str)
+        {
+            $res = str_replace(array('.'), '', $str);
+
+            
+            return preg_replace('~\D~', '', $res);
+        }
+
+        // dd($request->to_tahap);
+        if ($request->to_tahap == 'Tahap 2') {
+            $tahap = 'To Tahap 2';
+        } elseif ($request->to_tahap == 'Tahap 3'){
+            $tahap = 'To Tahap 3';
+        }
+        $file_bukti_pembayaran = $request->buktipembayaran;
+        $fileName_bukti_pembayaran = time() . '_' . $file_bukti_pembayaran->getClientOriginalName();
+        $file_bukti_pembayaran->move(public_path('storage/bukti-pembayaran'), $fileName_bukti_pembayaran);
+
+        $datapemesanan = DataPemesanan::where('id', $id)->first();
+        $data = RemoveSpecialChar($datapemesanan->total_harga_bayar) + RemoveSpecialChar($request->harga_bayar);
+        $datapemesanan->update([
+            'tahap' => $tahap,
+            'harga_bayar' => RemoveSpecialChar($request->harga_bayar),
+            'total_harga_bayar' => $data,
+            'bukti_pembayaran' => $fileName_bukti_pembayaran,
+        ]);
+
+        session(['pembayaran_desain' => $datapemesanan]);
+        return redirect()->back()->with('success', 'Berhasil melakukan pembayaran');
     }
 
     /**
@@ -403,8 +466,57 @@ class UserController extends Controller
 
     public function download_pembayaran_desain(Request $request)
     {
+        
         $data = session('pembayaran_desain');
         $pdf = PDF::loadView('user-folder.pdf-pembayaran-desain', compact('data'));
+        session(['pembayaran_desain' => NULL]);
         return $pdf->download('pembayaran-desain.pdf');
+    }
+
+    public function upload_revisi(Request $request)
+    {
+        $datapemesanan = DataPemesanan::where('id_pemesan', Auth::user()->id)->where('status_pengerjaan', 'Dalam Pengerjaan')->first();
+
+        $revisi = Revisi::where('id_pesanan',  $datapemesanan->id)->get();
+        if (count($revisi) >= 3) {
+            return redirect()->back()->with('error', 'Anda hanya bisa melakukan revisi sebanyak 3x!');
+        }
+        $revisi = Revisi::create([
+            "id_pemesan" => Auth::user()->id,
+            "id_pesanan" => $datapemesanan->id,
+            "revisi" => $request->revisi,
+            "revisi_tahap" => $datapemesanan->tahap,
+            "status_revisi" => 'Belum Selesai',
+        ]);
+
+        return redirect()->back()->with('success', 'Berhasil mengirim revisi');
+    }
+
+    public function hapus_revisi($revisi_id)
+    {
+        $revisi = Revisi::find($revisi_id);
+        $revisi->delete();
+
+        return redirect()->back();
+    }
+
+    public function done_revisi($revisi_id)
+    {
+        $revisi = Revisi::find($revisi_id);
+        $revisi->update([
+            'status_revisi' => 'Selesai'
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function done_confirm()
+    {
+        $datapemesanan = DataPemesanan::where('id_pemesan',Auth::user()->id)->where('status_pengerjaan', 'Dalam Pengerjaan')->first();
+        $datapemesanan->update([
+            'tahap' => 'to Selesai'
+        ]);
+
+        return redirect()->back();
     }
 }

@@ -78,14 +78,15 @@
             <div class="row mt-2">
                 <div class="col" style="max-width: 15rem !important">
                     <div class="title-filter">
-                        <p>Status Pengerjaan</p>
+                        <p>Tahap</p>
                     </div>
                     <div class="form-group">
                         <select class="form-select select2 " id="filter-status">
                             <option value="">Semua</option>
                             <option value="Belum Dikonfirmasi">Belum Dikonfirmasi</option>
-                            <option value="Dalam Pengerjaan">Dalam Pengerjaan</option>
-                            <option value="Selesai Dikerjakan">Selesai Dikerjakan</option>
+                            <option value="Tahap 1">Tahap 1</option>
+                            <option value="Tahap 2">Tahap 2</option>
+                            <option value="Tahap 3">Tahap 3</option>
                         </select>
                     </div>
                 </div>
@@ -103,6 +104,10 @@
                         <th>Nama Desain</th>
                         <th>Tipe Lantai</th>
                         <th>Harga</th>
+                        <th>Harga Bayar</th>
+                        <th>Total Harga Bayar</th>
+                        <th>Tahap</th>
+                        <th>Revisi</th>
                         <th>Pembayaran Via</th>
                         <th>Bukti Pembayaran</th>
                         <th>Status Pengerjaan</th>
@@ -199,7 +204,7 @@
     <script>
         let status = $('#filter-status').val();
         let table = $('#tablePesanan').DataTable({
-            dom: 'Bfrtip',
+            dom: 'lBfrtip',
             buttons: {
                 buttons: [{
                     extend: 'excel',
@@ -211,7 +216,7 @@
                 dom: {
                     button: {
                         tag: "button",
-                        className: "btn btn-success"
+                        className: "btn btn-success mt-2"
                     },
                     buttonLiner: {
                         tag: null
@@ -219,7 +224,7 @@
                 }
             },
             order: [
-                [11, "desc"]
+                [15, "desc"]
             ],
             scrollX: true,
             processing: true,
@@ -253,6 +258,18 @@
                 searchable: false
             }, {
                 data: 'harga_pesanan',
+                searchable: false
+            }, {
+                data: 'harga_bayar',
+                searchable: false
+            }, {
+                data: 'total_harga_bayar',
+                searchable: false
+            }, {
+                data: 'tahap',
+                searchable: false
+            }, {
+                data: 'daftar_revisi',
                 searchable: false
             }, {
                 data: 'pembayaran_via',
