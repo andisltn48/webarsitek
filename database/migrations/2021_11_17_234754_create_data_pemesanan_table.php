@@ -30,6 +30,7 @@ class CreateDataPemesananTable extends Migration
             $table->string('pembayaran_via');
             $table->string('bukti_pembayaran');
             $table->string('status_pengerjaan');
+            $table->string('rab')->nullable();
             $table->bigInteger('no_pemesanan');
             $table->timestamps();
         });

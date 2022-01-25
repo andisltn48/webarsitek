@@ -137,6 +137,7 @@ class PesananController extends Controller
         return $datatables->addIndexColumn()->escapeColumns([])
         ->addColumn('action','admin-folder.pesanan.action')
         ->addColumn('daftar_revisi','admin-folder.pesanan.daftar-revisi')
+        ->addColumn('daftar_progress','admin-folder.pesanan.daftar-progress')
         ->addColumn('bukti_pembayaran','admin-folder.pesanan.lihat-bukti')
         ->toJson();
     }
@@ -164,6 +165,50 @@ class PesananController extends Controller
         return redirect()->back()->with('success', 'Berhasil update progress');
     }
 
+    public function store_progress_to_tahap_3(Request $request, $id)
+    {
+    
+        $pemesanan =  DataPemesanan::find($request->id_pesanan);
+        if ($request->gambar_progress != NULL) {
+            foreach ($request->gambar_progress as $key => $value) {
+
+                $file_progress = $value;
+                $fileName_progress = time() . '_' . $file_progress->getClientOriginalName();
+                $file_progress->move(public_path('storage/progress'), $fileName_progress);
+            
+                $store = Progress::create([
+                    'id_pemesan' => $id,
+                    'id_pesanan' => $request->id_pesanan,
+                    'progress' => $fileName_progress,
+                    'tipe_progress' => $request->tipe_progress,
+                    'judul' => $request->judul,
+                    'tahap' => $pemesanan->tahap,
+                    'deskripsi' => $request->deskripsi
+                ]);
+            }
+        } else {
+            $store = Progress::create([
+                'id_pemesan' => $id,
+                'id_pesanan' => $request->id_pesanan,
+                'tipe_progress' => $request->tipe_progress,
+                'judul' => $request->judul,
+                'tahap' => $pemesanan->tahap,
+                'deskripsi' => $request->deskripsi
+            ]);
+        }
+        
+        if ($request->rab != NULL) {
+            $file_rab = $request->rab;
+            $fileName_rab = time() . '_' . $file_rab->getClientOriginalName();
+            $file_rab->move(public_path('storage/rab'), $fileName_rab);
+            $pemesanan->update([
+                'rab' => $fileName_rab
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Berhasil update progress');
+    }
+
     public function confirm($id)
     {
         $datapemesanan = DataPemesanan::where('id', $id)->first();
@@ -183,6 +228,13 @@ class PesananController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Berhasil ke tahap 2');        
+    }
+
+    public function daftar_progress($id)
+    {
+        $datapemesanan = DataPemesanan::where('id', $id)->first();
+        $daftarProgress = Progress::where('id_pesanan', $id)->where('tahap', $datapemesanan->tahap)->get();
+        return view('admin-folder.pesanan.daftar-progress-page', compact('daftarProgress'));
     }
 
     public function to_tahap_tiga($id)
@@ -275,5 +327,12 @@ class PesananController extends Controller
         ->addColumn('deskripsi','admin-folder.pesanan-renovasi.deskripsi-item-renovasi')
         ->addColumn('bukti_pembayaran','admin-folder.pesanan-renovasi.lihat-bukti')
         ->toJson();
+    }
+
+    public function hapus_progress($id)
+    {
+        $progress = Progress::find($id);
+        $progress->delete();
+        return redirect()->back()->with('success', 'Berhasil menghapus progress');
     }
 }

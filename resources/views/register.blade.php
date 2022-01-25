@@ -52,6 +52,18 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="form-outline mb-3">
+                            <label class="form-label fs-6" for="form3Example4">Konfirmasi Password<sup
+                                    class="text-danger">*</sup></label>
+                            <input style="border-radius: 2rem !important" type="password" id="password-baru2"
+                                class="form-control form-control-lg" placeholder="Masukkan password"
+                                name="password_confirmation" required />
+                            <div class="text-danger">
+                                @error('password_confirmation')
+                                    {{ $message }}
+                                @enderror
+                            </div>
+                        </div>
 
                         <div class="">
                             <!-- Checkbox -->

@@ -36,7 +36,12 @@ class InformasiController extends Controller
      */
     public function store(Request $request)
     {
+        $file_informasi = $request->gambar_informasi;
+        $fileName_gambarInformasi = time().'_'.$file_informasi->getClientOriginalName();
+        $file_informasi->move(public_path('storage/gambar-informasi'), $fileName_gambarInformasi);
         $informasi = Informasi::create([
+            'gambar' => $fileName_gambarInformasi,
+            'title' => $request->judul,
             'informasi' => $request->informasi
         ]);
 
@@ -74,9 +79,23 @@ class InformasiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $informasi=Informasi::where('id', $id)->update([
-            'informasi' => $request->informasi_edit
-        ]);
+        if ($request->gambar_informasi != NULL) {
+            $file_informasi = $request->gambar_informasi;
+            $fileName_gambarInformasi = time().'_'.$file_informasi->getClientOriginalName();
+            $file_informasi->move(public_path('storage/gambar-informasi'), $fileName_gambarInformasi);
+            $informasi=Informasi::where('id', $id)->update([
+                'gambar' => $fileName_gambarInformasi,
+                'title' => $request->judul,
+                'informasi' => $request->informasi_edit
+            ]);
+        } else {
+            $informasi=Informasi::where('id', $id)->update([
+                'title' => $request->judul,
+                'informasi' => $request->informasi_edit
+            ]);
+        }
+        
+        
 
         return redirect()->back()->with('success', 'Berhasil melakukan edit informasi');
     }
@@ -106,6 +125,7 @@ class InformasiController extends Controller
         });
         return $datatables->addIndexColumn()->escapeColumns([])
         ->addColumn('action','admin-folder.informasi.action')
+        ->addColumn('gambar','admin-folder.informasi.gambar')
         ->toJson();
     }
 }

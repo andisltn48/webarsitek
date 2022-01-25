@@ -11,6 +11,7 @@ use App\Models\Progress;
 use App\Models\Misi;
 use App\Models\Revisi;
 use App\Models\Media;
+use App\Models\GambarPortofolio;
 use App\Models\Informasi;
 use App\Models\Visi;
 use App\Models\Renov;
@@ -299,7 +300,7 @@ class UserController extends Controller
 
     public function media()
     {
-        $allmedia = Media::all();
+        $allmedia = GambarPortofolio::all();
         return view('user-folder.media', compact('allmedia'));
     }
 
@@ -473,11 +474,16 @@ class UserController extends Controller
         return $pdf->download('pembayaran-desain.pdf');
     }
 
+    public function batal_download(Type $var = null)
+    {
+        session(['pembayaran_desain' => NULL]);
+    }
+
     public function upload_revisi(Request $request)
     {
         $datapemesanan = DataPemesanan::where('id_pemesan', Auth::user()->id)->where('status_pengerjaan', 'Dalam Pengerjaan')->first();
 
-        $revisi = Revisi::where('id_pesanan',  $datapemesanan->id)->get();
+        $revisi = Revisi::where('id_pesanan',  $datapemesanan->id)->where('revisi_tahap', 'Tahap 2')->get();
         if (count($revisi) >= 3) {
             return redirect()->back()->with('error', 'Anda hanya bisa melakukan revisi sebanyak 3x!');
         }
@@ -497,7 +503,7 @@ class UserController extends Controller
         $revisi = Revisi::find($revisi_id);
         $revisi->delete();
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Revisi berhasil dihapus');
     }
 
     public function done_revisi($revisi_id)
@@ -507,16 +513,24 @@ class UserController extends Controller
             'status_revisi' => 'Selesai'
         ]);
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Revisi berhasil di selesaikan');
     }
 
-    public function done_confirm()
+    public function done_confirm(Request $request)
     {
         $datapemesanan = DataPemesanan::where('id_pemesan',Auth::user()->id)->where('status_pengerjaan', 'Dalam Pengerjaan')->first();
         $datapemesanan->update([
+            'nama_pemesan' => $request->penerima,
+            'alamat_pemesan' => $request->alamat,
+            'kontak_pemesan' => $request->kontak,
             'tahap' => 'to Selesai'
         ]);
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Pesanan anda akan dikirim ke alamat anda');
+    }
+
+    public function download_rab($rab)
+    {
+        return response()->download(public_path('storage/rab/'.$rab));
     }
 }

@@ -110,6 +110,7 @@
                         <th>Revisi</th>
                         <th>Pembayaran Via</th>
                         <th>Bukti Pembayaran</th>
+                        <th>Daftar Progress</th>
                         <th>Status Pengerjaan</th>
                         <th>Updatet At</th>
                         <th>Action</th>
@@ -145,12 +146,14 @@
                         <div class="mb-3">
                             <div class="form-group">
                                 <label class="text-dark fw">Tipe Progress<sup class="text-danger">*</sup></label>
-                                <select style="margin-top:0.7rem !important" required class="form-select select2 "
+                                {{-- <select style="margin-top:0.7rem !important" required class="form-select select2 "
                                     name="tipe_progress">
                                     <option value="">Semua</option>
                                     <option value="Progress Desain">Progress Desain</option>
                                     <option value="Progress Pengerjaan">Progress Pengerjaan</option>
-                                </select>
+                                </select> --}}
+                                
+                                <input type="text" class="form-control shadow-sm" name="tipe_progress" value="Progress Desain" readonly>
                             </div>
                         </div>
                         <div class="mb-3">
@@ -159,6 +162,81 @@
                                 <div class="custom-file">
                                     <input multiple accept="image/*" required class="form-control-file"
                                         name="gambar_progress[]" type="file">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label class="text-dark fw">Judul<sup class="text-danger">*</sup></label>
+                                <input class="form-control shadow-sm" name="judul" style="margin-top:0.3rem" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label class="text-dark fw">Deskripsi</label>
+                                <input class="form-control shadow-sm" name="deskripsi" style="margin-top:0.3rem">
+                            </div>
+                        </div>
+                        <div class="col text-center mt-4">
+                            <button type="submit" style="border-radius: 2rem"
+                                class="btn btn-primary shadow">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modal-progress-tahap-3" class="modal fade bd-example-modal-lg" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- konten modal-->
+            <div class="modal-content">
+                <!-- heading modal -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Update Progress</h4>
+                    <button type="button" class="btn" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="fas fa-times"></i></span>
+                    </button>
+                </div>
+                <!-- body modal -->
+
+                <div class="model-body p-4">
+                    <form id="form-progress-tahap3" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="text" name="id_pesanan" id="id-pesanan-tahap3" hidden>
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label class="text-dark fw">Nama Pemesan<sup class="text-danger">*</sup></label>
+                                <input class="form-control shadow-sm" name="nama_pemesan" id="nama-pemesan-tahap3"
+                                    style="margin-top:0.3rem" readonly>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label class="text-dark fw">Tipe Progress<sup class="text-danger">*</sup></label>
+                                {{-- <select style="margin-top:0.7rem !important" required class="form-select select2 "
+                                    name="tipe_progress">
+                                    <option value="">Semua</option>
+                                    <option value="Progress Desain">Progress Desain</option>
+                                    <option value="Progress Pengerjaan">Progress Pengerjaan</option>
+                                </select> --}}
+                                <input type="text" class="form-control shadow-sm" name="tipe_progress" value="Progress Desain" readonly>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="mt-3">
+                                <label for="exampleFormControlInput1">Gambar</label>
+                                <div class="custom-file">
+                                    <input multiple accept="image/*" required class="form-control-file"
+                                        name="gambar_progress[]" type="file">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="mt-3">
+                                <label for="exampleFormControlInput1">RAB</label>
+                                <div class="custom-file">
+                                    <input class="form-control-file"
+                                        name="rab" type="file">
                                 </div>
                             </div>
                         </div>
@@ -224,7 +302,7 @@
                 }
             },
             order: [
-                [15, "desc"]
+                [16, "desc"]
             ],
             scrollX: true,
             processing: true,
@@ -278,6 +356,9 @@
                 data: 'bukti_pembayaran',
                 searchable: false
             }, {
+                data: 'daftar_progress',
+                searchable: false
+            }, {
                 data: 'status_pengerjaan',
                 searchable: false
             }, {
@@ -305,6 +386,18 @@
             $('#nama-pemesan').attr('value', nama);
             $('#id-pesanan').attr('value', id_pesanan);
             $('#form-progress').attr('action', link);
+        });
+
+        $(document).on('click', '.btn-update-progress-3', function(event) {
+            // return confirm($(this).data('tanggalSP2D'));
+            var id_pesanan = $(this).data('idpesanan');
+            var nama = $(this).data('nama');
+            var link = $(this).data('link');
+
+            // console.log(nama, harga, deskripsi)
+            $('#nama-pemesan-tahap3').attr('value', nama);
+            $('#id-pesanan-tahap3').attr('value', id_pesanan);
+            $('#form-progress-tahap3').attr('action', link);
         });
 
         $(document).on('click', '.modal-image', function(event) {

@@ -28,12 +28,23 @@
                         <div class="form-group">
                             <p>Kata sandi baru<sup class="text-danger">*</sup></p>
 
-                            <div class="form-group">
+                            <div class="form-group mb-3">
                                 <input style="word-break: break-all !important" type="password" id="password"
                                     name="password" class="form-control" required>
                             </div>
                             <div class="text-danger">
                                 @error('password')
+                                    {{ $message }}
+                                @enderror
+                            </div>
+
+                            <p>Konfirmasi Kata sandi<sup class="mt-5 text-danger">*</sup></p>
+                            <div class="form-group">
+                                <input style="word-break: break-all !important" type="password" id="passwordconfirm"
+                                    name="password_confirmation" class="form-control" required>
+                            </div>
+                            <div class="text-danger">
+                                @error('password_confirmation')
                                     {{ $message }}
                                 @enderror
                             </div>

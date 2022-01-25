@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Media;
+use App\Models\GambarPortofolio;
 use Yajra\Datatables\Datatables;
 
 class MediaController extends Controller
@@ -37,14 +38,24 @@ class MediaController extends Controller
     public function store(Request $request)
     {
         $file_media = $request->gambar_media;
-        $fileName_gambarMedia = time().'_'.$file_media->getClientOriginalName();
-        $file_media->move(public_path('storage/gambar-media'), $fileName_gambarMedia);
 
         $datamedia = Media::create([
-            'gambar' => $fileName_gambarMedia,
+            'gambar' => 'GAMBAR',
             'judul' => $request->judul,
             'deskripsi' => $request->deskripsi
         ]);
+
+        foreach ($file_media as $key => $value) {
+            $file_gambar = $value;
+            $fileName_gambar = time().'_'.$file_gambar->getClientOriginalName();
+            $file_gambar->move(public_path('storage/gambar-media'), $fileName_gambar);
+            // echo $value;
+
+            $datagambar = GambarPortofolio::create([
+                'id_portofolio' => $datamedia->id,
+                'gambar' => $fileName_gambar
+            ]);
+        }
 
         return redirect()->back()->with('success', 'Berhasil menambahkan media');
     }
@@ -112,7 +123,11 @@ class MediaController extends Controller
     public function destroy($id)
     {
         $datamedia = Media::where('id', $id)->first();
-        \File::delete(public_path('storage/gambar-media/'.$datamedia->gambar));
+        $gambar = GambarPortofolio::where('id_portofolio', $datamedia->id)->get();
+        foreach ($gambar as $key => $value) {
+            $value->delete();
+        }
+        // \File::delete(public_path('storage/gambar-media/'.$datamedia->gambar));
         $datamedia->delete();
 
         return redirect()->back()->with('success', 'Berhasil menghapus media');
@@ -130,12 +145,19 @@ class MediaController extends Controller
         return $datatables->addIndexColumn()->escapeColumns([])
         ->addColumn('gambar','admin-folder.media.lihat-gambar')
         ->addColumn('action','admin-folder.media.action')
+        ->addColumn('lihat','admin-folder.media.lihat')
         ->toJson();
     }
 
     public function all_media()
     {
-        $allmedia = Media::all();
+        $allmedia = GambarPortofolio::all();
         return view('admin-folder.media.all-media', compact('allmedia'));
+    }
+
+    public function get_gambar($id)
+    {
+        $daftargambar = GambarPortofolio::where('id_portofolio', $id)->get();
+        return view('admin-folder.media.daftar-gambar', compact('daftargambar'));
     }
 }

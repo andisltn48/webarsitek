@@ -92,7 +92,7 @@
                             <div class="mt-3">
                                 <label for="exampleFormControlInput1">Gambar<sup class="text-danger">*</sup></label>
                                 <div class="custom-file">
-                                    <input accept="image/*" required class="form-control-file" name="gambar_media"
+                                    <input multiple accept="image/*" required class="form-control-file" name="gambar_media[]"
                                         type="file">
                                 </div>
                             </div>
@@ -139,7 +139,7 @@
                     <form id="form-media-edit" method="POST" enctype="multipart/form-data">
                         @method('PUT')
                         @csrf
-                        <div class="mb-3">
+                        {{-- <div class="mb-3">
                             <div class="mt-3">
                                 <label for="exampleFormControlInput1">Gambar (jika ingin mengubah gambar)</label>
                                 <div class="custom-file">
@@ -147,7 +147,7 @@
                                         type="file">
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="mb-3">
                             <div class="form-group">
                                 <label style="margin-bottom:10px" class="text-dark fw">Judul<sup
@@ -216,7 +216,7 @@
                 orderable: false,
                 searchable: false
             }, {
-                data: 'gambar',
+                data: 'lihat',
                 className: 'dt-body-nowrap',
             }, {
                 data: 'judul',

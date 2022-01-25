@@ -49,7 +49,8 @@ Route::group(['middleware' => ['auth','cekrole:User,Admin']], function(){
 
     Route::get('/renovasi-user', [UserController::class, 'renovasi'])->name('user.renovasi');
 
-    Route::get('/done-confirm', [UserController::class, 'done_confirm'])->name('user.done-confirm');
+    Route::post('/done-confirm', [UserController::class, 'done_confirm'])->name('user.done-confirm');
+    Route::get('/batal-download', [UserController::class, 'batal_download'])->name('user.batal-download');
 
     Route::post('/store-to-kart', [UserController::class, 'store_item_to_kart'])->name('user.store-to-kart');
 
@@ -80,6 +81,8 @@ Route::group(['middleware' => ['auth','cekrole:User,Admin']], function(){
     Route::get('/download-pembayaran-renovasi', [UserController::class, 'download_pembayaran_renovasi'])->name('pembayaran.download-pdf-renovasi');
 
     Route::get('/download-pembayaran-desain', [UserController::class, 'download_pembayaran_desain'])->name('pembayaran.download-pdf-desain');
+
+    Route::get('/download-rab/{rab}', [UserController::class, 'download_rab'])->name('user.download-rab');
 });
 
 Route::group(['middleware' => ['auth','cekrole:Admin']], function(){
@@ -102,6 +105,7 @@ Route::group(['middleware' => ['auth','cekrole:Admin']], function(){
     Route::resource('media', MediaController::class);
     Route::get('/get-media', [MediaController::class, 'get_media'])->name('media.get-media');
     Route::get('/all-media', [MediaController::class, 'all_media'])->name('media.all-media');
+    Route::get('/get-gambar-portofolio/{id}', [MediaController::class, 'get_gambar'])->name('media.get-gambar-portofolio');
 
     Route::resource('informasi', InformasiController::class);
     Route::get('/get-info', [InformasiController::class, 'get_info'])->name('informasi.get-info');
@@ -124,9 +128,12 @@ Route::group(['middleware' => ['auth','cekrole:Admin,Arsitek']], function(){
     Route::get('/get-pesanan', [PesananController::class, 'get_pesanan'])->name('pesanan.get-pesanan');
     Route::get('/confirm/{id}', [PesananController::class, 'confirm'])->name('pesanan.confirm');
     Route::get('/done/{id}', [PesananController::class, 'done'])->name('pesanan.done');
+    Route::get('/hapus-progress/{id}', [PesananController::class, 'hapus_progress'])->name('pesanan.hapus-progress');
+    Route::get('/daftar-progress/{id}', [PesananController::class, 'daftar_progress'])->name('pesanan.daftar-progress');
     Route::get('/to-tahap-dua/{id}', [PesananController::class, 'to_tahap_dua'])->name('pesanan.to-tahap-dua');
     Route::get('/to-tahap-tiga/{id}', [PesananController::class, 'to_tahap_tiga'])->name('pesanan.to-tahap-tiga');
     Route::post('/store-progress/{id}', [PesananController::class, 'store_progress'])->name('pesanan.store-progress');
+    Route::post('/store-progress-tahap-3/{id}', [PesananController::class, 'store_progress_to_tahap_3'])->name('pesanan.store-progress-tahap-3');
 
     Route::resource('desain', DesainController::class);
     Route::get('/get-desain', [DesainController::class, 'get_desain'])->name('desain.get-desain');

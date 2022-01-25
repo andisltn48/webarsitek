@@ -42,7 +42,7 @@ class AuthController extends Controller
     public function register(Request $request){
         $request->validate(
             [
-                'password' => ['min:6','regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'],
+                'password' => ['min:6','regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/','confirmed'],
                 'email' => ['unique:users,email']
             ],
             [
@@ -63,7 +63,7 @@ class AuthController extends Controller
     public function register_arsitek(Request $request){
         $request->validate(
             [
-                'password' => ['min:6','regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'],
+                'password' => ['min:6','regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/','confirmed'],
                 'email' => ['unique:users,email']
             ],
             [
@@ -115,7 +115,7 @@ class AuthController extends Controller
     {
         $request->validate(
             [
-                'password' => ['min:6','regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'],
+                'password' => ['min:6','regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/','confirmed'],
                 'email' => ['unique:users,email']
             ],
             [
@@ -135,10 +135,10 @@ class AuthController extends Controller
     {
         $request->validate(
             [
-                'password_baru' => ['min:6','regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'],
+                'password' => ['min:6','regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/','confirmed'],
             ],
             [
-                'password_baru.regex' => 'Must contain at least one uppercase/lowercase letters and one number'
+                'password.regex' => 'Must contain at least one uppercase/lowercase letters and one number'
             ]
         );
 

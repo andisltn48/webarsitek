@@ -5,14 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Informasi extends Model
+class GambarPortofolio extends Model
 {
     use HasFactory;
-    public $table = "informasi";
+    public $table = 'gambar_portofolio';
     protected $fillable = [
-        'gambar',
-        'title',
-        'informasi'
+        'id_portofolio',
+        'gambar'
     ];
 
     public function getUpdatedAtAttribute($value)
@@ -24,5 +23,3 @@ class Informasi extends Model
         return date('d-m-Y H:i:s', strtotime($value));
     }
 }
-
-

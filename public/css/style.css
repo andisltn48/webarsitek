@@ -69,6 +69,13 @@ body {
     --z-fixed: 100
 }
 
+.table-image td{
+    vertical-align: middle;
+}
+.table-image th{
+    vertical-align: middle;
+}
+
 *,
 ::before,
 ::after {
@@ -274,6 +281,12 @@ padding: 6px 12px;
     object-fit: cover !important;
 }
 
+.img-informasi {
+    transition: transform 0.5s ease !important;
+    height: 20rem !important;
+    object-fit: cover !important;
+}
+
 .img-progress {
     transition: transform 0.5s ease !important;
     height: 30rem !important;
@@ -402,7 +415,7 @@ flex-wrap: wrap !important;
           display: none !important;
       }
 
-      .row-sosmed{
+      .row-sosmed, .row-informasi{
           flex-direction: column !important;
       }
   }

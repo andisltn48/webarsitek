@@ -15,7 +15,7 @@
     @if (session('success'))
         <div class="alert alert-success alert-dismissible show fade">
             <div class="text-end">
-                <button type="button" class="btn close" data-dismiss="alert" aria-label="Close">
+                <button type="button" class="btn close btn-closed" data-dismiss="alert" aria-label="Close">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -37,11 +37,14 @@
         <a data-toggle="modal" data-target="#modal-daftar-pesanan" href="" class="btn btn-primary"
             style="border-radius: 2rem">Lihat pesanan</a>
     </div>
+    <div class="text-center fs-4 fw-bold">Progress Desain</div>
 
-    <div class="tab_user">
+    <hr class="mt-2" size="5" style="width:15%;margin:auto;color:#303296">
+
+    {{-- <div class="tab_user">
         <button class="tablinks active" onclick="openDesign(event, 'Desain')">Progress Desain</button>
-        <button class="tablinks" onclick="openDesign(event, 'Pengerjaan')">Progress Pengerjaan</button>
-    </div>
+        {{-- <button class="tablinks" onclick="openDesign(event, 'Pengerjaan')">Progress Pengerjaan</button> --}}
+    {{-- </div> --}}
     {{-- <img src="{{ asset('images/carouseimage.jpg') }}" alt=""> --}}
 
 
@@ -169,8 +172,13 @@
             </div>
 
             <div class="text-center p-3">
+                @if ($datapemesanan->rab != null)
+                    <a href="{{ route('user.download-rab', $datapemesanan->rab) }} " class="btn btn-primary">Download
+                        RAB</a>
+                @endif
                 @if ($datapemesanan->tahap == 'Tahap 3')
-                    <a href="{{route('user.done-confirm')}} " class="btn btn-primary">Terima</a>
+                    {{-- href="{{ route('user.done-confirm') }}" --}}
+                    <a data-target="#modal-terima-desain" data-toggle="modal" class="btn btn-primary">Terima</a>
                 @endif
             </div>
         @endif
@@ -213,6 +221,52 @@
                         <img style="width: 100%; overflow: hidden !important" id="img-modal" alt="">
                         <h5 class="fw-bold mt-3">Deskripsi</h5>
                         <p id="deskripsi"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="modal-terima-desain" class="modal fade bd-example-modal-lg" role="dialog">
+            <div class="modal-dialog">
+                <!-- konten modal-->
+                <div class="modal-content">
+                    <!-- heading modal -->
+                    <div class="modal-header">
+                        <h3 id=""></h3>
+                        <button type="button" class="btn" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><i class="fas fa-times"></i></span>
+                        </button>
+                    </div>
+                    <!-- body modal -->
+
+                    <div class="model-body p-4">
+                        <form action="{{ route('user.done-confirm') }}" method="POST">
+                            @csrf
+                            <div class="mt-3">
+                                <p>Nama Penerima<sup class="text-danger">*</sup></p>
+                            </div>
+                            <div class="form-group">
+                                <input id="example-penerima" name="penerima" required type="text" class="form-control"
+                                    value="{{ $datapemesanan->nama_pemesan }}">
+                            </div>
+                            <div class="mt-3">
+                                <p>Alamat<sup class="text-danger">*</sup></p>
+                            </div>
+                            <div class="form-group">
+                                <textarea name="alamat" class="form-control" id="example-alamat" rows="3"
+                                    required>{{ $datapemesanan->alamat_pemesan }}</textarea>
+                            </div>
+                            <div class="mt-3">
+                                <p>Whatsapp<sup class="text-danger">*</sup></p>
+                            </div>
+                            <div class="form-group">
+                                <input id="example-kontak" value="{{ $datapemesanan->kontak_pemesan }}" name="kontak"
+                                    required type="number" class="form-control">
+                            </div>
+                            <div class="text-center">
+    
+                                <button type="submit" class="btn btn-primary mt-3">Kirim</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -702,6 +756,29 @@
             }
             document.getElementById(tabName).classList.add("active");
             evt.currentTarget.className += " active";
+        }
+
+        $(document).on('click', '.btn-closed', function(event) {
+            $.ajax({
+                url: "{{ route('user.batal-download') }}",
+                type: "GET",
+                data: {
+                    items: arr_items,
+                    curr_id: id_aset
+                },
+            });
+        });
+
+        function batal_download() {
+            alert('ok')
+            $.ajax({
+                url: "{{ route('user.batal-download') }}",
+                type: "GET",
+                data: {
+                    items: arr_items,
+                    curr_id: id_aset
+                },
+            });
         }
     </script>
 </x-app-layout>

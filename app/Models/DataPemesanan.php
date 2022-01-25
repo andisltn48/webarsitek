@@ -22,6 +22,7 @@ class DataPemesanan extends Model
         'harga_bayar',
         'total_harga_bayar',
         'tahap',
+        'rab',
         'pembayaran_via',
         'bukti_pembayaran',
         'status_pengerjaan',

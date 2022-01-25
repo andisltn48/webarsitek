@@ -10,7 +10,7 @@
                 @foreach ($allmedia as $item)
                     <a href="{{ asset('storage/gambar-media/'.$item->gambar) }}" class="mt-4 mybox" title="{{$item->judul}}"
                         data-lcl-txt="{{$item->deskripsi}}">
-                        <img class="img-fluid rounded shadow" src="{{ asset('storage/gambar-media/'.$item->gambar) }}" width="300"
+                        <img class="img-design rounded shadow" src="{{ asset('storage/gambar-media/'.$item->gambar) }}" width="300"
                             alt="">
                     </a>
                 @endforeach
